@@ -1,32 +1,6 @@
 const axios = require('axios').default;
-const cheerio = require('cheerio');
 
-/* Get Stock Tickers from  stockanalysis.com */
-const stocks = async () => {
-    async () => {
-        const res = await axios.get('https://stockanalysis.com/stocks/');
-        const $ = cheerio.load(res.data);
-        const list = $('ul.no-spacing');
-        const li = list.find('li');
-        const tickerList = [];
-        li.each((i, el) => {
-            const text = $(el).text().split(' - ');
-            console.log(text);
-            const ticker = text[0];
-            const company = text[1];
-            tickerList.push({
-                ticker,
-                company
-            });
-        });
-        return tickerList;
-    }
-}
-
-
-
-/* Get Crypto Tickers from coinmarketcap.com */
-const getCoinMarketCapListing = async (fromStart, limiter) => {
+const getListing = async (fromStart, limiter) => {
     return axios.get('https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing', {
         headers: {
             Accept: '*/*'
@@ -44,7 +18,7 @@ const getCoinMarketCapListing = async (fromStart, limiter) => {
     });
 }
 
-const cryptos = async () => {
+const getCryptos = async () => {
     let fromStart = 1;
     const limiter = 499;
 
@@ -52,7 +26,7 @@ const cryptos = async () => {
         totalCount: 0,
         cryptos: []
     };
-    const listing = await getCoinMarketCapListing(fromStart, limiter);
+    const listing = await getListing(fromStart, limiter);
     fromStart += listing.data.data.cryptoCurrencyList.length;
     for (const crypto of listing.data.data.cryptoCurrencyList) {
         cryptos.cryptos.push(crypto);
@@ -62,9 +36,9 @@ const cryptos = async () => {
     for (let i = fromStart; i <= totalCountCryptos; i += limiter) {
         let anotherListing;
         try {
-            anotherListing = await getCoinMarketCapListing(fromStart, limiter);
+            anotherListing = await getListing(fromStart, limiter);
         } catch (err) {
-            console.error(err);
+            console.log(err);
             return cryptos;
         }
         fromStart += listing.data.data.cryptoCurrencyList.length;
@@ -76,7 +50,7 @@ const cryptos = async () => {
     return cryptos;
 }
 
-module.exports = {
-    stocks,
-    cryptos
-}
+(async () => {
+    const cryptos = await getCryptos();
+    console.log(cryptos.totalCount);
+})();
