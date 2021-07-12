@@ -10,7 +10,6 @@ const stocks = async () => {
     const tickerList = [];
     li.each((i, el) => {
         const text = $(el).text().split(' - ');
-        console.log(text);
         const ticker = text[0];
         const company = text[1];
         tickerList.push({
