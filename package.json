@@ -1,14 +1,15 @@
 {
   "name": "ticker-list",
-  "version": "1.0.1",
-  "description": "Get a full list of stock tickers from https://stockanalysis.com/stocks/",
+  "version": "2.0.0",
+  "description": "Get a full listing of stock tickers from https://stockanalysis.com/ and a full listing of crypto tickers from https://coinmarketcap.com/",
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js"
   },
   "keywords": [
     "stock",
-    "tickers"
+    "tickers",
+    "crypto"
   ],
   "author": "bingobangobotto",
   "license": "ISC",
