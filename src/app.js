@@ -3,24 +3,22 @@ const cheerio = require('cheerio');
 
 /* Get Stock Tickers from  stockanalysis.com */
 const stocks = async () => {
-    async () => {
-        const res = await axios.get('https://stockanalysis.com/stocks/');
-        const $ = cheerio.load(res.data);
-        const list = $('ul.no-spacing');
-        const li = list.find('li');
-        const tickerList = [];
-        li.each((i, el) => {
-            const text = $(el).text().split(' - ');
-            console.log(text);
-            const ticker = text[0];
-            const company = text[1];
-            tickerList.push({
-                ticker,
-                company
-            });
+    const res = await axios.get('https://stockanalysis.com/stocks/');
+    const $ = cheerio.load(res.data);
+    const list = $('ul.no-spacing');
+    const li = list.find('li');
+    const tickerList = [];
+    li.each((i, el) => {
+        const text = $(el).text().split(' - ');
+        console.log(text);
+        const ticker = text[0];
+        const company = text[1];
+        tickerList.push({
+            ticker,
+            company
         });
-        return tickerList;
-    }
+    });
+    return tickerList;
 }
 
 
@@ -48,15 +46,11 @@ const cryptos = async () => {
     let fromStart = 1;
     const limiter = 499;
 
-    const cryptos = {
-        totalCount: 0,
-        cryptos: []
-    };
+    const cryptos = [];
     const listing = await getCoinMarketCapListing(fromStart, limiter);
     fromStart += listing.data.data.cryptoCurrencyList.length;
     for (const crypto of listing.data.data.cryptoCurrencyList) {
-        cryptos.cryptos.push(crypto);
-        cryptos.totalCount++;
+        cryptos.push(crypto);
     }
     const totalCountCryptos = parseInt(listing.data.data.totalCount);
     for (let i = fromStart; i <= totalCountCryptos; i += limiter) {
@@ -69,8 +63,7 @@ const cryptos = async () => {
         }
         fromStart += listing.data.data.cryptoCurrencyList.length;
         for (const crypto of anotherListing.data.data.cryptoCurrencyList) {
-            cryptos.cryptos.push(crypto);
-            cryptos.totalCount++;
+            cryptos.push(crypto);
         }
     }
     return cryptos;
