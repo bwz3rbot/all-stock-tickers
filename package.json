@@ -1,5 +1,5 @@
 {
-  "name": "ticker_list",
+  "name": "ticker-list",
   "version": "1.0.0",
   "description": "",
   "main": "src/app.js",
