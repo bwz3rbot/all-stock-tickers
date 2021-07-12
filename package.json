@@ -1,6 +1,6 @@
 {
   "name": "ticker-list",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Get a full list of stock tickers from https://stockanalysis.com/stocks/",
   "main": "src/app.js",
   "scripts": {
